@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="us">
+<head>
+	<meta charset="utf-8">
+	<title>UI basic</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+  <form id="info" >
+    <label for="longstring">Long string:</label><br>
+    <input type="text" id="longstring" name="longstring"><br>
+    <label for="word">Word:</label><br>
+    <input type="text" id="word" name="word"><br>
+    <input type="reset" value="Text search">
+  </form>
+
+  <p id="message" > </p>
+
+  <script>
+	const info = document.getElementById('info')
+	const longstring = document.getElementById('longstring')
+	const word = document.getElementById('word')
+	const msg = document.getElementById('message')
+
+	info.addEventListener('reset', function() { compare()} )
+
+    function showMsg() {
+        msg.innerHTML = 'Input strings then press button'
+    }
+
+    showMsg()
+
+    var matchIndexArray = []
+
+    function print(resultMsg) {
+        msg.innerHTML = resultMsg
+    }
+
+    function compare() {
+    let s1 = longstring.value
+    let s2 = word.value
+    var cnt = 0
+    var chars = 0
+    var resultMsg = ''
+    var idxBegin = -1
+
+    for (var i=0; i<s1.length; i++) {
+        for (var j=0; j<s2.length; j++) {
+            
+            if (s2[j] != s1[i]) {
+                // No match
+                chars = 0
+                break
+            } else {
+
+                console.log('match char: ' + s2[j])
+
+                chars += 1
+
+                // check s2 head and tail
+                if (chars == s2.length) {
+                    cnt += 1
+                    console.log('current match count: ' + cnt)
+
+                    // zero based index
+                    // console.log('Match ends: [' + s2[0] + '] at: (' + i + ', ' + j + ')')	
+                    idxBegin = i - (s2.length - 1)
+                    matchIndexArray.push(idxBegin)
+
+                    if (s1[i] == s2[0]) {
+                        // words first letter is the same as current index, matched count set to one.
+                        chars = 1
+                    } else {
+                        chars = 0
+                    }
+                    break
+                }
+                // increment i to compare next letter
+                i += 1
+            }
+        }
+    }
+
+    resultMsg = 'Long string: ' + s1 + '<br > Word: ' + s2 + '<br >'
+    resultMsg += 'Found match count: ' + cnt + '<br >'
+    resultMsg += 'At index: ' 
+    
+    for (idx = 0; idx < matchIndexArray.length; idx++) {
+        resultMsg += matchIndexArray[idx] + ' '
+    }
+
+    resultMsg += '<br >'
+
+    print(resultMsg)
+
+    // clean up 
+    matchIndexArray = []
+
+    }
+
+  </script>
+</body>
+
+</html>
